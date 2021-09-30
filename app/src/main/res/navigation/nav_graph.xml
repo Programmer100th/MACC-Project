@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.bringmetheapp.worldmonuments.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.bringmetheapp.worldmonuments.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_sitesListFragment"
+            app:destination="@id/sitesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.bringmetheapp.worldmonuments.GameFragment"
+        android:label="Game"
+        tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.bringmetheapp.worldmonuments.FavoritesFragment"
+        android:label="Favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/sitesListFragment"
+        android:name="com.bringmetheapp.worldmonuments.SitesListFragment"
+        android:label="Sites List"
+        tools:layout="@layout/fragment_sites_list" >
+        <argument
+            android:name="country"
+            app:argType="string" />
+        <argument
+            android:name="categories"
+            app:argType="string" />
+        <argument
+            android:name="relevance"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_sitesListFragment_to_singleSiteFragment"
+            app:destination="@id/singleSiteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleSiteFragment"
+        android:name="com.bringmetheapp.worldmonuments.SingleSiteFragment"
+        android:label="{name}"
+        tools:layout="@layout/fragment_single_site" >
+        <argument
+            android:name="geonameId"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="longitude"
+            app:argType="float" />
+        <argument
+            android:name="latitude"
+            app:argType="float" />
+        <argument
+            android:name="category"
+            app:argType="string" />
+        <argument
+            android:name="country"
+            app:argType="string" />
+        <argument
+            android:name="countryIso"
+            app:argType="string" />
+        <argument
+            android:name="admin1Code"
+            app:argType="string" />
+        <argument
+            android:name="admin2Code"
+            app:argType="string" />
+        <argument
+            android:name="link"
+            app:argType="string" />
+        <argument
+            android:name="relevance"
+            app:argType="integer" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="imageLink"
+            app:argType="string" />
+    </fragment>
+</navigation>

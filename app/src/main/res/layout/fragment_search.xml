@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context = ".SearchFragment">
+
+
+
+    <TextView
+        android:id="@+id/countriesView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Country"
+        android:padding="12dp"
+        android:drawablePadding="16dp"
+        android:drawableEnd="@drawable/ic_arrow_down"/>
+
+    <TextView
+        android:id="@+id/categoriesView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Categories"
+        android:padding="12dp"
+        android:drawablePadding="16dp"
+        android:drawableEnd="@drawable/ic_arrow_down"/>
+
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/relevanceSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="500000"
+        android:stepSize="10"/>
+
+
+
+
+
+
+
+    <Button
+        android:id="@+id/btnSearchSites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search" />
+
+
+
+
+</LinearLayout>
