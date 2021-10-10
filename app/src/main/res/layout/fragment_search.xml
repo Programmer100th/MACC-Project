@@ -1,53 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context = ".SearchFragment">
+    tools:context=".SearchFragment">
 
 
+    <!--
 
     <TextView
         android:id="@+id/countriesView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Country"
-        android:padding="12dp"
+        android:drawableEnd="@drawable/ic_arrow_down"
         android:drawablePadding="16dp"
-        android:drawableEnd="@drawable/ic_arrow_down"/>
+        android:hint="Select Country"
+        android:padding="12dp" />
+
+        -->
+
+
+    <TextView
+        android:id="@+id/countriesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Country:"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteCountriesView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:hint="Type a country"
+        android:padding="12dp" />
+
+
+    <TextView
+        android:id="@+id/categoriesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Categories:"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
 
     <TextView
         android:id="@+id/categoriesView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Categories"
-        android:padding="12dp"
+        android:layout_marginBottom="30dp"
+        android:drawableEnd="@drawable/ic_arrow_down"
         android:drawablePadding="16dp"
-        android:drawableEnd="@drawable/ic_arrow_down"/>
+        android:hint="Choose at least one category"
+        android:padding="12dp" />
+
+
+    <TextView
+        android:id="@+id/RelevanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Relevance:"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
 
     <com.google.android.material.slider.Slider
         android:id="@+id/relevanceSlider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:stepSize="10"
         android:valueFrom="0"
         android:valueTo="500000"
-        android:stepSize="10"/>
-
-
-
-
-
+        android:layout_marginBottom="30dp"/>
 
 
     <Button
         android:id="@+id/btnSearchSites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search" />
-
-
+        android:layout_gravity="center_horizontal"
+        android:text="Search Sites" />
 
 
 </LinearLayout>

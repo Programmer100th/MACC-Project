@@ -28,7 +28,11 @@
         android:id="@+id/favoritesFragment"
         android:name="com.bringmetheapp.worldmonuments.FavoritesFragment"
         android:label="Favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_singleSiteFragment"
+            app:destination="@id/singleSiteFragment" />
+    </fragment>
     <fragment
         android:id="@+id/sitesListFragment"
         android:name="com.bringmetheapp.worldmonuments.SitesListFragment"
@@ -46,6 +50,10 @@
         <action
             android:id="@+id/action_sitesListFragment_to_singleSiteFragment"
             app:destination="@id/singleSiteFragment" />
+        <action
+            android:id="@+id/action_sitesListFragment_to_sitesMapFragment"
+            app:popUpTo="@+id/searchFragment"
+            app:destination="@id/sitesMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/singleSiteFragment"
@@ -91,5 +99,44 @@
         <argument
             android:name="imageLink"
             app:argType="string" />
+        <action
+            android:id="@+id/action_singleSiteFragment_to_bottomSheetReviewFragment"
+            app:destination="@id/bottomSheetReviewFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetReviewFragment"
+        android:name="com.bringmetheapp.worldmonuments.BottomSheetReviewFragment"
+        android:label="fragment_bottom_sheet_review"
+        tools:layout="@layout/fragment_bottom_sheet_review" >
+        <argument
+            android:name="geonameId"
+            app:argType="integer" />
+    </dialog>
+    <fragment
+        android:id="@+id/sitesMapFragment"
+        android:name="com.bringmetheapp.worldmonuments.SitesMapFragment"
+        android:label="Sites Map"
+        tools:layout="@layout/fragment_sites_map" >
+        <action
+            android:id="@+id/action_sitesMapFragment_to_sitesListFragment"
+            app:popUpTo="@+id/searchFragment"
+            app:destination="@id/sitesListFragment" />
+        <argument
+            android:name="country"
+            app:argType="string" />
+        <argument
+            android:name="categories"
+            app:argType="string" />
+        <argument
+            android:name="relevance"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_sitesMapFragment_to_singleSiteFragment"
+            app:destination="@id/singleSiteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.bringmetheapp.worldmonuments.UserFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_user" />
 </navigation>

@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center"
     android:orientation="vertical"
-    android:id="@+id/rootFragmentSitesList"
-    tools:context=".SitesListFragment">
+    android:id="@+id/rootFragmentSitesMap"
+    tools:context=".SitesMapFragment">
 
     <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/mapToggleSwitchView"
         android:layout_width="match_parent"
-        android:id="@+id/listToggleSwitchView"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
+        app:checkedButton="@+id/mapButtonSitesMap"
         app:selectionRequired="true"
-        app:checkedButton="@+id/listButtonSitesList"
         app:singleSelection="true">
 
 
         <Button
+            android:id="@+id/mapButtonSitesList"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listButtonSitesList"
-            android:text="List"
             android:layout_weight="1"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            android:text="List" />
 
 
         <Button
+            android:id="@+id/mapButtonSitesMap"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listButtonSitesMap"
             android:layout_weight="1"
-            android:text="Map"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            android:text="Map" />
 
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/sitesRecyclerView"
-        android:padding="4dp"
-        android:clipToPadding="false"
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/site_item"/>
+        mapbox:mapbox_cameraTargetLat="41.89018"
+        mapbox:mapbox_cameraTargetLng="12.49231"
+        mapbox:mapbox_cameraZoom="4"
+        app:mapbox_renderTextureMode="true"/>
+    <!-- renderTextureMode true avoid blink screen between transition of fragments -->
 
 </LinearLayout>

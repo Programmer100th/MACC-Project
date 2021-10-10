@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">WorldMonuments</string>
 
+    <string name="mapbox_access_token">pk.eyJ1IjoicHJvZ3JhbW1lcjEwMHRoIiwiYSI6ImNrc2dkaWh2cjExcGQyd3RidGp4bmJ2engifQ.d2gGexRnrH1v7UjVYsBx2A</string>
+
     <string-array name="countries">
 
+        <item>World</item>
         <item>Afghanistan (AF)</item>
         <item>Åland Islands (AX)</item>
         <item>Albania (AL)</item>
