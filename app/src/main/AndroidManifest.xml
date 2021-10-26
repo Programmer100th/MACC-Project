@@ -3,6 +3,7 @@
     package="com.bringmetheapp.worldmonuments">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Needed for mapbox -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -14,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WorldMonuments">
         <activity android:name=".UserActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
