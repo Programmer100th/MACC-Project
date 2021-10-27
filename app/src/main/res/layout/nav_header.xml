@@ -11,14 +11,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_round" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:text="World's Monuments"/>
+        android:src="@drawable/logo" />
 
 </LinearLayout>

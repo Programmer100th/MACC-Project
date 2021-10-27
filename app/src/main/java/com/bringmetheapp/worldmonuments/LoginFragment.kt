@@ -18,8 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.toolbox.*
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputLayout
@@ -105,29 +104,30 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         Log.d("Email", email)
         Log.d("Password", password)
 
-        val stringRequest = StringRequest(
-            Request.Method.GET, url, { response ->
+        val jsonRequest = JsonObjectRequest(
+            Request.Method.GET, url, null, { response ->
                 try {
 
-                    val reply = JSONObject(response.toString())
+                    val reply = response
 
-                    if (reply!!.has("message")) {
-                        Toast.makeText(
-                            context,
-                            "User doesn't exist!",
-                            Toast.LENGTH_SHORT
-                        )
+                    if(reply.length() == 0)
+                    {
+                        Toast.makeText(context, "The password does not match with the given email", Toast.LENGTH_SHORT)
                             .show()
 
+                    }
 
-                    } else {
+                    else {
+
+
                         val e = reply!!.getString("email")
                         val n = reply!!.getString("nickname")
 
                         Configuration.EMAIL = e
                         Configuration.NICKNAME = n
 
-                        val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+                        val sharedPreferences =
+                            context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
                         val editor = sharedPreferences?.edit()
                         editor?.apply {
                             putString("nickname", n)
@@ -143,17 +143,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         activity?.startActivity(intent)
                     }
 
+
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
 
             },
             {  error: VolleyError? ->
+                Toast.makeText(context, "There is no user registered with this email", Toast.LENGTH_SHORT)
+                    .show()
                 Log.i("info", "Polling: " + error.toString())
             })
 
 
-        mQueue?.add(stringRequest)
+        mQueue?.add(jsonRequest)
     }
 
     // Handle sign in result (for Google Games sign in)

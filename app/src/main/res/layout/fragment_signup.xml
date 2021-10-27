@@ -83,7 +83,7 @@
             app:layout_constraintStart_toStartOf="@+id/signup_email_field"
             app:layout_constraintTop_toBottomOf="@+id/signup_email_field"
             app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/white">
+            app:passwordToggleTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -92,27 +92,6 @@
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/signup_password_confirmation_field"
-            style="@style/LoginTextInputLayoutStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="Confirm password"
-            android:textColorHint="@color/black"
-            app:boxBackgroundColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@id/signup_password_field"
-            app:layout_constraintStart_toStartOf="@+id/signup_password_field"
-            app:layout_constraintTop_toBottomOf="@id/signup_password_field"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:textColor="@color/black" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signup_btn"
@@ -124,8 +103,8 @@
             android:text="Sign Up"
             android:textAllCaps="false"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/signup_password_confirmation_field"
-            app:layout_constraintStart_toStartOf="@+id/signup_password_confirmation_field"
-            app:layout_constraintTop_toBottomOf="@id/signup_password_confirmation_field" />
+            app:layout_constraintEnd_toEndOf="@+id/signup_password_field"
+            app:layout_constraintStart_toStartOf="@+id/signup_password_field"
+            app:layout_constraintTop_toBottomOf="@id/signup_password_field" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

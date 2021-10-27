@@ -13,14 +13,16 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONException
+import org.json.JSONObject
+
 
 class SignupFragment : Fragment(R.layout.fragment_signup) {
 
-    private var nickname : TextInputLayout? = null
-    private var email : TextInputLayout? = null
-    private var password : TextInputLayout? = null
+    private var nickname: TextInputLayout? = null
+    private var email: TextInputLayout? = null
+    private var password: TextInputLayout? = null
 
-    private var btnSignup : Button? = null
+    private var btnSignup: Button? = null
 
     private var mQueue: RequestQueue? = null
 
@@ -42,7 +44,6 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
             val passwordString = password!!.editText?.text.toString()
 
 
-
             val url =
                 "https://world-monuments.herokuapp.com/users?" +
                         "nickname=" + nicknameString + "&email=" + emailString + "&password=" + passwordString
@@ -52,21 +53,35 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                     try {
 
 
+                        view.findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
 
-                        val jsonArray = response
                         Toast.makeText(context, "User registered", Toast.LENGTH_SHORT).show()
 
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }
                 },
-                { Toast.makeText(context, "Registration not successful", Toast.LENGTH_SHORT).show() })
+                {
+
+                    val statusCode = it.networkResponse.statusCode
+                    val errorMessage = String(it.networkResponse.data)
+                    val errorMessageWithoutQuotes = errorMessage.substring(1, (errorMessage.length) - 2)
+                    if (statusCode == 409) {
+                        Toast.makeText(context, errorMessageWithoutQuotes, Toast.LENGTH_SHORT)
+                            .show()
+
+                    } else {
+
+
+                        Toast.makeText(
+                            context,
+                            "Registration not successful" + String(it.networkResponse.data),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
 
             mQueue?.add(request)
-
-
-
-            view.findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
 
 
         }
