@@ -55,7 +55,10 @@ class SitesListFragment : Fragment(R.layout.fragment_sites_list),
 
             val buttonSitesMap = view.findViewById<Button>(R.id.listButtonSitesMap)
 
+
             val sitesRecyclerView = view.findViewById<RecyclerView>(R.id.sitesRecyclerView)
+
+
 
 
 
@@ -70,6 +73,9 @@ class SitesListFragment : Fragment(R.layout.fragment_sites_list),
                     args.relevance
                 )
                 findNavController().navigate(action)
+
+
+
             }
 
 
@@ -83,6 +89,8 @@ class SitesListFragment : Fragment(R.layout.fragment_sites_list),
 
             jsonParse(sitesRecyclerView)
         }
+
+
 
 
     }
@@ -102,8 +110,8 @@ class SitesListFragment : Fragment(R.layout.fragment_sites_list),
                         val site = jsonArray.getJSONObject(i)
                         val geonameId = site.getInt("geonameId")
                         val name = site.getString("name")
-                        val longitude = site.getDouble("longitude").toFloat()
-                        val latitude = site.getDouble("latitude").toFloat()
+                        val longitude = site.getDouble("longitude")
+                        val latitude = site.getDouble("latitude")
                         val category = site.getString("category")
                         val country = site.getString("country")
                         val countryIso = site.getString("countryIso")
@@ -152,13 +160,18 @@ class SitesListFragment : Fragment(R.layout.fragment_sites_list),
     override fun onItemClick(position: Int) {
         val clickedItem = siteList[position]
         val action = SitesListFragmentDirections.actionSitesListFragmentToSingleSiteFragment(
-            clickedItem.geonameId, clickedItem.name, clickedItem.longitude, clickedItem.latitude,
+            clickedItem.geonameId, clickedItem.name, clickedItem.longitude.toFloat(), clickedItem.latitude.toFloat(),
             clickedItem.category, clickedItem.country, clickedItem.countryIso,
             clickedItem.admin1Code, clickedItem.admin2Code, clickedItem.link,
             clickedItem.relevance, clickedItem.description, clickedItem.imageLink
         )
+
+
         findNavController().navigate(action)
+
+
     }
+
 
 
     /*

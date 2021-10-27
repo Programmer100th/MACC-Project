@@ -11,8 +11,8 @@
         android:label="Home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_homeFragment_to_sitesListFragment"
+            app:destination="@id/sitesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -29,11 +29,11 @@
         android:label="Game"
         tools:layout="@layout/fragment_game" >
         <action
-            android:id="@+id/action_gameFragment_to_gameSinglePlayerFragment"
-            app:destination="@id/gameSinglePlayerFragment" />
-        <action
             android:id="@+id/action_gameFragment_to_gameLoadingFragment"
             app:destination="@id/gameLoadingFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_gameSinglePlayerFragment"
+            app:destination="@id/gameSinglePlayerFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -63,7 +63,7 @@
             app:destination="@id/singleSiteFragment" />
         <action
             android:id="@+id/action_sitesListFragment_to_sitesMapFragment"
-            app:popUpTo="@+id/searchFragment"
+            app:popUpTo="@+id/homeFragment"
             app:destination="@id/sitesMapFragment" />
     </fragment>
     <fragment
@@ -130,7 +130,7 @@
         tools:layout="@layout/fragment_sites_map" >
         <action
             android:id="@+id/action_sitesMapFragment_to_sitesListFragment"
-            app:popUpTo="@+id/searchFragment"
+            app:popUpTo="@+id/homeFragment"
             app:destination="@id/sitesListFragment" />
         <argument
             android:name="country"
@@ -151,39 +151,10 @@
         android:label="Profile"
         tools:layout="@layout/fragment_user" />
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.bringmetheapp.worldmonuments.LoginFragment"
-        android:label="fragment_login_2"
-        tools:layout="@layout/fragment_login_2" >
-        <action
-            android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signupFragment"
-        android:name="com.bringmetheapp.worldmonuments.SignupFragment"
-        android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" >
-        <action
-            android:id="@+id/action_signupFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/gameSinglePlayerFragment"
-        android:name="com.bringmetheapp.worldmonuments.GameSinglePlayerFragment"
-        android:label="GameSinglePlayerFragment" >
-        <action
-            android:id="@+id/action_gameSinglePlayerFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/gameLoadingFragment"
         android:name="com.bringmetheapp.worldmonuments.GameLoadingFragment"
-        android:label="fragment_loading"
-        tools:layout="@layout/fragment_loading" >
+        android:label="Loading Minigame"
+        tools:layout="@layout/fragment_loading">
         <action
             android:id="@+id/action_gameLoadingFragment_to_gameMultiPlayerFragment"
             app:destination="@id/gameMultiPlayerFragment" />
@@ -191,10 +162,19 @@
     <fragment
         android:id="@+id/gameMultiPlayerFragment"
         android:name="com.bringmetheapp.worldmonuments.GameMultiPlayerFragment"
-        android:label="fragment_multi_player"
-        tools:layout="@layout/fragment_multi_player" >
+        android:label="Multi Player Minigame"
+        tools:layout="@layout/fragment_multi_player">
         <action
             android:id="@+id/action_gameMultiPlayerFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameSinglePlayerFragment"
+        android:name="com.bringmetheapp.worldmonuments.GameSinglePlayerFragment"
+        android:label="Single Player Minigame"
+        tools:layout="@layout/fragment_single_player" >
+        <action
+            android:id="@+id/action_gameSinglePlayerFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
     </fragment>
 </navigation>

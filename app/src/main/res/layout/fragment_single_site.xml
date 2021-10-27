@@ -227,8 +227,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Add review"
-            android:textAllCaps="false"
-            android:textSize="10dp"
             android:layout_below="@+id/singleSiteLink"
             android:layout_alignParentRight="true"/>
 

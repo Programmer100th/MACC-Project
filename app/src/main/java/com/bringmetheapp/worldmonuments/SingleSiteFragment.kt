@@ -1,5 +1,6 @@
 package com.bringmetheapp.worldmonuments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -23,7 +24,12 @@ class SingleSiteFragment : Fragment(R.layout.fragment_single_site) {
 
     private val args: SingleSiteFragmentArgs by navArgs()
 
-    private val currentUserNickname = "Samu"
+
+    private lateinit var currentUserNickname : String
+
+
+
+    //private val currentUserNickname = "Samu"
 
     val reviewList = ArrayList<ReviewItem>()
 
@@ -31,6 +37,10 @@ class SingleSiteFragment : Fragment(R.layout.fragment_single_site) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+        currentUserNickname = sharedPreferences?.getString("nickname", "").toString()
 
         val singleSiteImage = view.findViewById<ImageView>(R.id.singleSiteImage)
         val singleSiteCategory = view.findViewById<TextView>(R.id.singleSiteCategory)
@@ -50,7 +60,10 @@ class SingleSiteFragment : Fragment(R.layout.fragment_single_site) {
 
 
 
-
+        //Svuoto la lista perchè altrimenti dopo aver premuto back
+        //dalla schermata del profilo mi ritrovo il dopione di tutte le reviews
+        //ma sarebbe piu corretto chiamare l'api solo una volta
+        reviewList.clear()
 
 
         mQueue = Volley.newRequestQueue(context)
@@ -104,8 +117,8 @@ class SingleSiteFragment : Fragment(R.layout.fragment_single_site) {
         singleSiteAdmin2Code.text = args.admin2Code
         singleSiteDescription.text = args.description
         singleSiteLink.text = args.link
-        singleSiteRelevance.text = args.relevance.toString()
-
+        //singleSiteRelevance.text = args.relevance.toString()
+        singleSiteRelevance.text = String.format("%,d", args.relevance)
     }
 
 

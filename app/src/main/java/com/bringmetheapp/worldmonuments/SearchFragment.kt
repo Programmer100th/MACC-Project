@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.slider.Slider
+import java.text.NumberFormat
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
@@ -193,6 +194,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
              */
         }
+
+
+
+        //Format label of slider
+        /*
+        relevanceSlider.setLabelFormatter { value: Float ->
+            String.format("%,f", value)
+        }
+
+         */
 
 
 

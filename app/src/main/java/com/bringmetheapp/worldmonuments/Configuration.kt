@@ -1,7 +1,6 @@
 package com.bringmetheapp.worldmonuments
 
 import org.json.JSONArray
-import java.net.Socket
 
 class Configuration {
     companion object {
@@ -20,12 +19,15 @@ class Configuration {
         val ANSWER = 2
         val END = 3
 
-        val pollingPeriod = 1000L
+        var END_VALUE = ""
+
+        val pollingPeriod = 500L
 
         //States of the server
         val INIT = 0 //Not used
         val WAITING = 1
-        val PLAY = 2 //Not used
+        val READY = 2
+        val PLAY = 3 //Not used
 
         var canPoll=false
 
@@ -33,7 +35,7 @@ class Configuration {
         var MULTIPLAYER = false
 
         //Questions
-        var questions = ""
+        var questions : JSONArray? = null
 
     }
 }

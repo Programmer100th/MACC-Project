@@ -25,6 +25,7 @@ class GameFragment : Fragment(R.layout.fragment_game) {
 
         btnMultiPlayer.setOnClickListener{
             myConfiguration.MULTIPLAYER = true
+            myConfiguration.ID = -1
             val action = GameFragmentDirections.actionGameFragmentToGameLoadingFragment()
             findNavController().navigate(action)
         }

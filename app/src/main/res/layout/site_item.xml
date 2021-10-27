@@ -10,51 +10,90 @@
         android:padding="8dp">
 
 
-        <!--
 
         <ImageView
             android:id="@+id/siteImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_videogame" />
 
-          -->
+
 
         <TextView
             android:id="@+id/siteName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/siteImage"
             android:text="Line 1"
-            android:padding="8dp"
+            android:padding="3dp"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/siteRelevanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:layout_below="@id/siteName"
+            android:layout_toEndOf="@+id/siteImage"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:text="Wiki Relevance:" />
 
         <TextView
             android:id="@+id/siteRelevance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="3dp"
             android:layout_below="@id/siteName"
+            android:layout_toEndOf="@+id/siteRelevanceLabel"
             android:textColor="@android:color/black"
             android:text="Line 2" />
+
+
+        <TextView
+            android:id="@+id/siteCountryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:layout_below="@id/siteRelevance"
+            android:layout_toEndOf="@+id/siteImage"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:text="Country:" />
 
         <TextView
             android:id="@+id/siteCountry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="3dp"
             android:layout_below="@id/siteRelevance"
+            android:layout_toEndOf="@+id/siteCountryLabel"
             android:textColor="@android:color/black"
             android:text="Line 3" />
+
+
+        <TextView
+            android:id="@+id/siteCategoryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:layout_below="@+id/siteCountry"
+            android:layout_toEndOf="@+id/siteImage"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:text="Category:" />
 
         <TextView
             android:id="@+id/siteCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="3dp"
             android:layout_below="@+id/siteCountry"
+            android:layout_toEndOf="@+id/siteCategoryLabel"
             android:textColor="@android:color/black"
             android:text="Line 4" />
 

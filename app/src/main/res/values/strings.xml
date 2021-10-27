@@ -264,42 +264,6 @@
     <string name="score_1">Opponent Score: 0</string>
     <string name="question_number">1/5 Question</string>
 
-    <string name="question_1">Where is the Colosseum located?</string>
-    <string name="question1_A">Germany</string>
-    <string name="question1_B">Italy</string>
-    <string name="question1_C">France</string>
-    <string name="question1_D">Spain</string>
-    <string name="answer_1">Italy</string>
-
-
-    <string name="question_2">Where is the Tour Eiffel located?</string>
-    <string name="question2_A">United States</string>
-    <string name="question2_B">Poland</string>
-    <string name="question2_C">France</string>
-    <string name="question2_D">Portugal</string>
-    <string name="answer_2">France</string>
-
-
-    <string name="question_3">Where is the Sagrada Familia located?</string>
-    <string name="question3_A">Spain</string>
-    <string name="question3_B">Switzerland</string>
-    <string name="question3_C">Canada</string>
-    <string name="question3_D">Russia</string>
-    <string name="answer_3">Spain</string>
-
-    <string name="question_4">Where is the Big Ben located?</string>
-    <string name="question4_A">Sweden</string>
-    <string name="question4_B">United Kingdom</string>
-    <string name="question4_C">Italy</string>
-    <string name="question4_D">Czech Republic</string>
-    <string name="answer_4">United Kingdom</string>
-
-    <string name="question_5">Where is the Taj Mahal located?</string>
-    <string name="question5_A">Ukraine</string>
-    <string name="question5_B">China</string>
-    <string name="question5_C">Germany</string>
-    <string name="question5_D">India</string>
-    <string name="answer_5">India</string>
 
     <string name="selectedoption">SelectedOption</string>
     <string name="correctanswer">CorrectAnswer</string>

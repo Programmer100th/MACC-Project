@@ -9,36 +9,38 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import com.google.android.gms.auth.api.signin.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.fragment_login_2.*
 import org.json.JSONException
 import org.json.JSONObject
 
-class LoginFragment: Fragment(R.layout.fragment_login_2) {
+class LoginFragment : Fragment(R.layout.fragment_login) {
 
-    private var email : TextInputLayout? = null
-    private var password : TextInputLayout? = null
+    private var email: TextInputLayout? = null
+    private var password: TextInputLayout? = null
 
-    private var btnSignUp : Button? = null
-    private var btnLogIn : Button? = null
-    private var btnGoogleLogin : SignInButton? = null
+    private var btnSignUp: Button? = null
+    private var btnLogIn: Button? = null
+    private var btnGoogleLogin: SignInButton? = null
 
     private var mQueue: RequestQueue? = null
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mActivityResultLauncher: ActivityResultLauncher<Intent>
+
+    //private lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,12 +63,11 @@ class LoginFragment: Fragment(R.layout.fragment_login_2) {
                 val account = task.getResult(ApiException::class.java)
 
                 handleSignInResult(account)
-            }
-            else
+            } else
                 Log.d("login", "Result launcher for sign in failed")
         }
 
-        return inflater.inflate(R.layout.fragment_login_2, container, false)
+        return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,15 +83,15 @@ class LoginFragment: Fragment(R.layout.fragment_login_2) {
         mQueue = Volley.newRequestQueue(context)
 
         btnSignUp?.setOnClickListener {
-            view.findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
             //showSignUpDialog(eNewUser?.getText().toString(), eNewPassword?.getText().toString(), eNewEmail?.getText().toString(), users!!, view)
         }
 
         btnLogIn?.setOnClickListener {
-                signIn(email!!.editText?.text.toString(), password!!.editText?.text.toString())
+            signIn(email!!.editText?.text.toString(), password!!.editText?.text.toString())
         }
 
-        btnGoogleLogin?.setOnClickListener{
+        btnGoogleLogin?.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
             mActivityResultLauncher.launch(signInIntent)
         }
@@ -98,32 +99,61 @@ class LoginFragment: Fragment(R.layout.fragment_login_2) {
 
     private fun signIn(email: String, password: String) {
 
-        val url = "https://world-monuments.herokuapp.com/users?email=" + email + "&password=" + password
+        val url =
+            "https://world-monuments.herokuapp.com/users?email=" + email + "&password=" + password
 
         Log.d("Email", email)
         Log.d("Password", password)
 
-        val request = JsonArrayRequest(
-            Request.Method.GET, url, null, { response ->
+        val stringRequest = StringRequest(
+            Request.Method.GET, url, { response ->
                 try {
 
-                    val json = response
+                    val reply = JSONObject(response.toString())
 
-                    Log.d("json", response.toString())
+                    if (reply!!.has("message")) {
+                        Toast.makeText(
+                            context,
+                            "User doesn't exist!",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
 
-                    Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        val e = reply!!.getString("email")
+                        val n = reply!!.getString("nickname")
+
+                        Configuration.EMAIL = e
+                        Configuration.NICKNAME = n
+
+                        val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences?.edit()
+                        editor?.apply {
+                            putString("nickname", n)
+                            putString("email", e)
+                            Log.d("nick", "ok")
+                            apply()
+                        }
+
+                        Toast.makeText(context, "Login completed!", Toast.LENGTH_SHORT)
+                            .show()
+
+                        val intent = Intent(activity, MainActivity::class.java)
+                        activity?.startActivity(intent)
+                    }
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
 
             },
-            { Log.d("API Request", "Something Went Wrong") })
+            {  error: VolleyError? ->
+                Log.i("info", "Polling: " + error.toString())
+            })
 
-        mQueue?.add(request)
 
-        //Configuration.NICKNAME = nickname
-
+        mQueue?.add(stringRequest)
     }
 
     // Handle sign in result (for Google Games sign in)
@@ -131,11 +161,10 @@ class LoginFragment: Fragment(R.layout.fragment_login_2) {
 
         if (account == null)
             Toast.makeText(context, "login error", Toast.LENGTH_SHORT).show()
-
         else {
             Toast.makeText(context, "login ok", Toast.LENGTH_SHORT).show()
 
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+            //findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
         }
     }
 /*
@@ -169,7 +198,7 @@ class LoginFragment: Fragment(R.layout.fragment_login_2) {
                 TODO("Not yet implemented")
             }
         })*/
-    }
+}
 /*
     private fun showSignUpDialog(nn: String, pwd: String, email: String, users: DatabaseReference, view: View) {
         val alert = androidx.appcompat.app.AlertDialog.Builder(view.context)

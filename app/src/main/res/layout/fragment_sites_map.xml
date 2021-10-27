@@ -46,7 +46,7 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="41.89018"
         mapbox:mapbox_cameraTargetLng="12.49231"
-        mapbox:mapbox_cameraZoom="4"
+        mapbox:mapbox_cameraZoom="2"
         app:mapbox_renderTextureMode="true"/>
     <!-- renderTextureMode true avoid blink screen between transition of fragments -->
 

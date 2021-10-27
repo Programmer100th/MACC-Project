@@ -1,5 +1,6 @@
 package com.bringmetheapp.worldmonuments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -18,13 +19,19 @@ import org.json.JSONException
 class FavoritesFragment : Fragment(R.layout.fragment_favorites),
     SiteItemAdapter.OnItemClickListener {
 
-    private val currentUserNickname = "Samu"
+
+    private lateinit var currentUserNickname : String
+
+    //private val currentUserNickname = "Samu"
     private var mQueue: RequestQueue? = null
     val siteList = ArrayList<SiteItem>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+        currentUserNickname = sharedPreferences?.getString("nickname", "").toString()
 
 
         //Svuoto la lista perchè altrimenti dopo aver premuto back
@@ -68,8 +75,8 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites),
 
 
                         val item = SiteItem(
-                            geonameId, name, longitude,
-                            latitude, category, country, countryIso,
+                            geonameId, name, longitude.toDouble(),
+                            latitude.toDouble(), category, country, countryIso,
                             admin1Code, admin2Code, link, relevance,
                             description, imageLink
                         )
@@ -100,7 +107,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites),
     override fun onItemClick(position: Int) {
         val clickedItem = siteList[position]
         val action = FavoritesFragmentDirections.actionFavoritesFragmentToSingleSiteFragment(
-            clickedItem.geonameId, clickedItem.name, clickedItem.longitude, clickedItem.latitude,
+            clickedItem.geonameId, clickedItem.name, clickedItem.longitude.toFloat(), clickedItem.latitude.toFloat(),
             clickedItem.category, clickedItem.country, clickedItem.countryIso,
             clickedItem.admin1Code, clickedItem.admin2Code, clickedItem.link,
             clickedItem.relevance, clickedItem.description, clickedItem.imageLink

@@ -42,11 +42,10 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
             val passwordString = password!!.editText?.text.toString()
 
 
-            val user = User(nicknameString, emailString, passwordString)
 
             val url =
                 "https://world-monuments.herokuapp.com/users?" +
-                        "nickname=" + user.nickname + "&email=" + user.email + "&password=" + user.password
+                        "nickname=" + nicknameString + "&email=" + emailString + "&password=" + passwordString
 
             val request = StringRequest(
                 Request.Method.PUT, url, { response ->
@@ -55,32 +54,21 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
 
                         val jsonArray = response
+                        Toast.makeText(context, "User registered", Toast.LENGTH_SHORT).show()
 
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }
                 },
-                { Toast.makeText(context, "KO", Toast.LENGTH_SHORT).show() })
+                { Toast.makeText(context, "Registration not successful", Toast.LENGTH_SHORT).show() })
 
             mQueue?.add(request)
 
-            Toast.makeText(context, user.nickname, Toast.LENGTH_SHORT).show()
+
 
             view.findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
 
-            /*users!!.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.child(user.nickname).exists())
-                        Toast.makeText(context, "User already exists!", Toast.LENGTH_SHORT)
-                            .show()
-                    else
-                        users!!.child(user.username).setValue(user)
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })*/
         }
     }
 }

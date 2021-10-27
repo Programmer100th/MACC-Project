@@ -69,6 +69,11 @@ dependencies {
         exclude group: 'group_name', module: 'module_name'
     }
 
+
+
+    //Plugin places useful for geocoder mapbox
+    //implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
+
     //Annotations Mapbox
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0'
 }

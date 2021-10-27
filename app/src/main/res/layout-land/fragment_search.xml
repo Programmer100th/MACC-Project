@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".SearchFragment">
 
 
@@ -22,10 +21,9 @@
         -->
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
 
         <TextView
@@ -39,8 +37,9 @@
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteCountriesView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/countriesLabel"
             android:layout_marginBottom="30dp"
             android:hint="Type a country"
             android:padding="12dp" />
@@ -50,6 +49,7 @@
             android:id="@+id/categoriesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/autoCompleteCountriesView"
             android:padding="12dp"
             android:text="Categories:"
             android:textColor="@color/black"
@@ -58,9 +58,11 @@
 
         <TextView
             android:id="@+id/categoriesView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/categoriesLabel"
             android:layout_marginBottom="30dp"
+            android:layout_toEndOf="@+id/autoCompleteCountriesView"
             android:drawableEnd="@drawable/ic_arrow_down"
             android:drawablePadding="16dp"
             android:hint="Choose at least one category"
@@ -68,9 +70,10 @@
 
 
         <TextView
-            android:id="@+id/RelevanceLabel"
+            android:id="@+id/relevanceLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/autoCompleteCountriesView"
             android:padding="12dp"
             android:text="Relevance:"
             android:textColor="@color/black"
@@ -81,6 +84,7 @@
             android:id="@+id/relevanceSlider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/relevanceLabel"
             android:layout_marginBottom="30dp"
             android:stepSize="1000"
             android:valueFrom="0"
@@ -92,10 +96,12 @@
             android:id="@+id/btnSearchSites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/relevanceSlider"
+            android:layout_margin="10dp"
+            android:layout_centerInParent="true"
             android:text="Search Sites" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </ScrollView>

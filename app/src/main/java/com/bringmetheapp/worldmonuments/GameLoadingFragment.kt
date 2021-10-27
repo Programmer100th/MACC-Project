@@ -30,6 +30,8 @@ class GameLoadingFragment : Fragment() {
 
     var queue: RequestQueue? = null
 
+    var flag = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         queue = Volley.newRequestQueue(context)
@@ -70,22 +72,19 @@ class GameLoadingFragment : Fragment() {
                     if (who == 0) {
                         Configuration.ID = 0
                         //Wait until the other player comes in
-                        Handler(Looper.getMainLooper()).postDelayed(
-                            { check() },
-                            Configuration.pollingPeriod
+                        Handler(Looper.getMainLooper()).postDelayed({check()}, Configuration.pollingPeriod
                         )
                     }
 
                     if (who == 1) {
                         Configuration.ID = 1
-                        val action =
-                            GameLoadingFragmentDirections.actionGameLoadingFragmentToGameMultiPlayerFragment()
+                        val action = GameLoadingFragmentDirections.actionGameLoadingFragmentToGameMultiPlayerFragment()
                         findNavController().navigate(action)
                     }
 
-                    Configuration.questions = reply!!.getString("questions")
+                    Configuration.questions = reply!!.getJSONArray("questions")
 
-                    Log.d("Quest", Configuration.questions)
+                    Log.d("Quest", Configuration.questions.toString())
                 }
             },
             { error: VolleyError? ->
@@ -96,6 +95,8 @@ class GameLoadingFragment : Fragment() {
     }
 
     fun check() {
+
+        Log.i("info", "response: " + Configuration.POLLING + " " + Configuration.ID)
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(
             Request.Method.GET,
@@ -116,6 +117,12 @@ class GameLoadingFragment : Fragment() {
                     } else {
                         findNavController().navigate(R.id.action_gameLoadingFragment_to_gameMultiPlayerFragment)
                     }
+                }
+                else {
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        { check() },
+                        Configuration.pollingPeriod
+                    )
                 }
             },
             { error: VolleyError? ->

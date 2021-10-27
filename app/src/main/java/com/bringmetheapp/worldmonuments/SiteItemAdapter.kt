@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.site_item.view.*
 
 class SiteItemAdapter(
@@ -32,8 +33,34 @@ class SiteItemAdapter(
 
         //imageResource, Site and Relevance are name givens in siteItem kotlin file
         //holder.siteImage.setImageResource(currentItem.imageResource)
+
+        val siteImageLink = currentItem.imageLink
+
+
+
+        //If there is no wiki image, then put a placeholder
+        if (siteImageLink.isEmpty()) {
+            holder.siteImage.setImageResource(R.drawable.ic_videogame);
+        } else {
+
+            //holder.homeItemImage.setImageResource(R.drawable.ic_videogame);
+
+
+            Picasso.get()
+                .load(siteImageLink)
+                //.resize(100,100)
+                //.onlyScaleDown()
+                .fit()
+                //.centerCrop()
+                .into(holder.siteImage)
+
+
+        }
+
+
+
         holder.siteName.text = currentItem.name
-        holder.siteRelevance.text = currentItem.relevance.toString()
+        holder.siteRelevance.text = String.format("%,d", currentItem.relevance)
         holder.siteCountry.text = currentItem.country
         holder.siteCategory.text = currentItem.category
     }
@@ -43,7 +70,8 @@ class SiteItemAdapter(
 
     inner class SiteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
-        //val siteImage: ImageView = itemView.findViewById(R.id.siteImage)
+
+        val siteImage: ImageView = itemView.findViewById(R.id.siteImage)
         val siteName: TextView = itemView.findViewById(R.id.siteName)
         val siteRelevance: TextView = itemView.findViewById(R.id.siteRelevance)
         val siteCountry: TextView = itemView.findViewById(R.id.siteCountry)

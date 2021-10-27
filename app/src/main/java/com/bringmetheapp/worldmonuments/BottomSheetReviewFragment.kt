@@ -1,5 +1,6 @@
 package com.bringmetheapp.worldmonuments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,7 +23,10 @@ class BottomSheetReviewFragment : BottomSheetDialogFragment() {
 
     private val args: BottomSheetReviewFragmentArgs by navArgs()
 
-    private val currentUserNickname = "Samu"
+
+    private lateinit var currentUserNickname : String
+
+    //private val currentUserNickname = "Samu"
     private var mQueue: RequestQueue? = null
 
 
@@ -37,6 +41,9 @@ class BottomSheetReviewFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+        currentUserNickname = sharedPreferences?.getString("nickname", "").toString()
 
         val addReviewRating = view.findViewById<RatingBar>(R.id.addReviewRating)
         val addReviewDescription = view.findViewById<EditText>(R.id.addReviewDescription)

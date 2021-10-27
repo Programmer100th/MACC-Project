@@ -85,16 +85,16 @@
             android:gravity="center_horizontal"
             android:padding="15dp">
 
-            <TextView
+            <Button
                 android:id="@+id/optionA"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/optiondesign"
+                android:backgroundTint="@color/white"
                 android:paddingTop="14dp"
                 android:textAlignment="center"
-                android:textColor="#272343">
+                android:textColor="@color/black">
 
-            </TextView>
+            </Button>
         </TableRow>
 
         <TableRow
@@ -104,17 +104,17 @@
             android:layout_marginBottom="10dp"
             android:gravity="center">
 
-            <TextView
+            <Button
                 android:id="@+id/optionB"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/optiondesign"
                 android:paddingTop="14dp"
                 android:textAlignment="center"
                 android:textColor="#272343">
 
-            </TextView>
+            </Button>
 
             <ImageView
                 android:id="@+id/gameArrow"
@@ -122,17 +122,17 @@
                 android:layout_height="100dp"
                 android:gravity="center" />
 
-            <TextView
+            <Button
                 android:id="@+id/optionC"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/optiondesign"
                 android:paddingTop="14dp"
                 android:textAlignment="center"
                 android:textColor="#272343">
 
-            </TextView>
+            </Button>
         </TableRow>
 
         <TableRow
@@ -141,17 +141,17 @@
             android:gravity="center_horizontal"
             android:padding="15dp">
 
-            <TextView
+            <Button
                 android:id="@+id/optionD"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/optiondesign"
                 android:paddingTop="14dp"
                 android:textAlignment="center"
                 android:textColor="#272343">
 
-            </TextView>
+            </Button>
         </TableRow>
 
     </TableLayout>
