@@ -292,11 +292,17 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
             orientation = ""
 
             val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
-            val editor = sharedPreferences?.edit()
-            editor?.apply {
-                putInt("highScore", mscore)
-                apply()
+            val highScore = sharedPreferences?.getInt("highScore", 0).toString()
+
+            if(mscore > highScore.toInt()){
+                val editor = sharedPreferences?.edit()
+                editor?.apply {
+                    putInt("highScore", mscore)
+                    apply()
+                }
             }
+
+
             val alert = AlertDialog.Builder(view.context)
             alert.setTitle("Game Over")
             alert.setCancelable(false)
