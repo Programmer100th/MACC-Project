@@ -12,6 +12,7 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -64,8 +65,6 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
     lateinit var main: MainActivity
 
-    var mAccelerometer: Sensor? = null
-
     var accValues = FloatArray(3)
 
     var orientation = ""
@@ -89,18 +88,6 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
             sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
             SensorManager.SENSOR_DELAY_NORMAL
         )
-
-        /*sensorManager.registerListener(
-            this,
-            sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-            SensorManager.SENSOR_DELAY_NORMAL
-        )*/
-
-        /*sensorManager.registerListener(
-            this,
-            sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
-            SensorManager.SENSOR_DELAY_NORMAL
-        )*/
 
         val root = inflater.inflate(R.layout.fragment_single_player, container, false)
 
@@ -130,22 +117,13 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
         mQueue = Volley.newRequestQueue(context)
 
-        //val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
-
-        //val deviceSensors: List<Sensor> = sensorManager.getSensorList(Sensor.TYPE_ALL)
-
-        loadQuestions()
-
-        Log.d("Prova", siteList.size.toString())
-
         gameArrow = view.findViewById(R.id.gameArrow)
 
         gameArrow.setImageResource(R.drawable.game_arrow)
 
-        /*AM.postRotate(-yaw * 180 / Math.PI.toFloat(), view.width / 2f, view.height / 2f)
+        checkOrientation()
 
-        gameArrow.setImageMatrix(AM)*/
-
+        loadQuestions()
 
         optionA?.setOnClickListener(View.OnClickListener {
             flagS = true
@@ -183,11 +161,7 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
             Request.Method.GET, url, null, { response ->
                 try {
 
-                    //Log.d("Item", "" + response.length())
-
                     val jsonArray = response
-
-                    //Log.d("Item", "ciao")
 
                     for (i in 0 until jsonArray.length()) {
                         val site = jsonArray.getJSONObject(i)
@@ -201,8 +175,6 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
                     siteList.shuffle()
 
-                    //Log.d("Item", "site")
-
                     val site = siteList[0]
 
                     var randomCountries = countries.asSequence().shuffled().take(3).toList()
@@ -214,7 +186,7 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
                             if ((elem.dropLast(5)).equals(site.country))
                                 flagC = true
                         }
-                        if(flagC == true)
+                        if (flagC == true)
                             randomCountries = countries.asSequence().shuffled().take(3).toList()
                         else
                             break
@@ -265,21 +237,10 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
     }
 
-
     private fun checkAnswer(option: TextView?) {
 
+        gameArrow.setRotation(0f)
         sensorManager.unregisterListener(this@GameSinglePlayerFragment)
-
-        /*val mTextView: TextView
-
-        if (orientation.equals("up"))
-            mTextView = optionA!!
-        else if (orientation.equals("left"))
-            mTextView = optionB!!
-        else if (orientation.equals("right"))
-            mTextView = optionC!!
-        else
-            mTextView = optionD!!*/
 
         val correctanswer = correctAnswer?.text.toString()
 
@@ -288,20 +249,19 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
         val m: String = checkout1!!.text.toString().trim()
         val n: String = checkout2!!.text.toString().trim()
         if (m == n) {
-            optionA?.setBackgroundResource(R.color.green)
+            option?.setBackgroundResource(R.color.green)
             Toast.makeText(context, "Right", Toast.LENGTH_SHORT).show()
             mscore = mscore + 1
         } else {
-            optionB?.setBackgroundResource(R.color.red)
+            option?.setBackgroundResource(R.color.red)
             Toast.makeText(context, "Wrong", Toast.LENGTH_SHORT).show()
         }
-
-
-        Thread.sleep(1000)
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateQuestion(view: View) {
+
+        Thread.sleep(2000)
 
         optionA?.setBackgroundResource(R.color.option)
         optionB?.setBackgroundResource(R.color.option)
@@ -316,6 +276,12 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
         currentIndex = (currentIndex + 1) % 5
         if (currentIndex == 0) {
+            val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.apply {
+                putInt("highScore", mscore)
+                apply()
+            }
             val alert = AlertDialog.Builder(view.context)
             alert.setTitle("Game Over")
             alert.setCancelable(false)
@@ -334,8 +300,7 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
                 loadQuestions()
             }
             alert.show()
-        }
-        else
+        } else
             loadQuestions()
 
         qn = qn + 1
@@ -351,57 +316,49 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
             Sensor.TYPE_ACCELEROMETER -> accValues = event.values.clone()
         }
 
-        if(flagS == false) {
-            if ((event!!.values[0] <= 2 && event!!.values[0] >= -2) && (event!!.values[1] < 3)) {
-                gameArrow.setRotation(0f)
-                orientation = "up"
-                optionA?.setBackgroundResource(R.color.yellowRating)
-                optionB?.setBackgroundResource(R.color.option)
-                optionC?.setBackgroundResource(R.color.option)
-                optionD?.setBackgroundResource(R.color.option)
-            } else if ((event!!.values[0] > 2)) {
-                gameArrow.setRotation(270f)
-                orientation = "left"
-                optionA?.setBackgroundResource(R.color.option)
-                optionB?.setBackgroundResource(R.color.yellowRating)
-                optionC?.setBackgroundResource(R.color.option)
-                optionD?.setBackgroundResource(R.color.option)
-            } else if ((event!!.values[0] < -2)) {
-                gameArrow.setRotation(90f)
-                orientation = "right"
-                optionA?.setBackgroundResource(R.color.option)
-                optionB?.setBackgroundResource(R.color.option)
-                optionC?.setBackgroundResource(R.color.yellowRating)
-                optionD?.setBackgroundResource(R.color.option)
-            } else {
-                gameArrow.setRotation(180f)
-                orientation = "down"
-                optionA?.setBackgroundResource(R.color.option)
-                optionB?.setBackgroundResource(R.color.option)
-                optionC?.setBackgroundResource(R.color.option)
-                optionD?.setBackgroundResource(R.color.yellowRating)
-            }
-            prevOrientation = orientation
-        }
-        else{
-            orientation = ""
-            prevOrientation = ""
+        if ((event!!.values[0] <= 2 && event!!.values[0] >= -2) && (event!!.values[1] < 3)) {
+            gameArrow.setRotation(0f)
+            orientation = "up"
+            optionA?.setBackgroundResource(R.color.yellowRating)
+            optionB?.setBackgroundResource(R.color.option)
+            optionC?.setBackgroundResource(R.color.option)
+            optionD?.setBackgroundResource(R.color.option)
+        } else if ((event!!.values[0] > 2)) {
+            gameArrow.setRotation(270f)
+            orientation = "left"
+            optionA?.setBackgroundResource(R.color.option)
+            optionB?.setBackgroundResource(R.color.yellowRating)
+            optionC?.setBackgroundResource(R.color.option)
+            optionD?.setBackgroundResource(R.color.option)
+        } else if ((event!!.values[0] < -2)) {
+            gameArrow.setRotation(90f)
+            orientation = "right"
+            optionA?.setBackgroundResource(R.color.option)
+            optionB?.setBackgroundResource(R.color.option)
+            optionC?.setBackgroundResource(R.color.yellowRating)
+            optionD?.setBackgroundResource(R.color.option)
+        } else {
+            gameArrow.setRotation(180f)
+            orientation = "down"
+            optionA?.setBackgroundResource(R.color.option)
+            optionB?.setBackgroundResource(R.color.option)
+            optionC?.setBackgroundResource(R.color.option)
+            optionD?.setBackgroundResource(R.color.yellowRating)
         }
 
+        view?.invalidate()
+    }
 
+    private fun checkOrientation(){
+        if(qn > 5) return
+        Handler(Looper.getMainLooper()).postDelayed({
+            if(prevOrientation == orientation) {
 
-
-        Handler().postDelayed({
-            if (prevOrientation == orientation && flagS == false) {
-
-                prevOrientation = ""
-                flagS = true
-
-                if (orientation.equals("up"))
+                if(orientation.equals("up"))
                     checkAnswer(optionA!!)
-                else if (orientation.equals("left"))
+                else if(orientation.equals("left"))
                     checkAnswer(optionB!!)
-                else if (orientation.equals("right"))
+                else if(orientation.equals("right"))
                     checkAnswer(optionC!!)
                 else
                     checkAnswer(optionD!!)
@@ -409,12 +366,11 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
                 updateQuestion(requireView())
 
             }
-
             prevOrientation = orientation
 
-        }, 2000)
+            checkOrientation()
 
-        view?.invalidate()
+        }, 2000)
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
@@ -425,15 +381,4 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
         TODO("Not yet implemented")
     }
 
-    override fun onResume() {
-        super.onResume()
-        mAccelerometer.also { acc ->
-            sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL)
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        sensorManager.unregisterListener(this)
-    }
 }

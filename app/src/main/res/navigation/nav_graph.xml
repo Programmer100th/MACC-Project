@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_gameFragment_to_gameSinglePlayerFragment"
             app:destination="@id/gameSinglePlayerFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_gameScoresFragment"
+            app:destination="@id/gameScoresFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -176,5 +179,11 @@
         <action
             android:id="@+id/action_gameSinglePlayerFragment_to_gameFragment"
             app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameScoresFragment"
+        android:name="com.bringmetheapp.worldmonuments.GameScoresFragment"
+        android:label="Scores"
+        tools:layout="@layout/fragment_scores" >
     </fragment>
 </navigation>

@@ -37,5 +37,10 @@ class Configuration {
         //Questions
         var questions : JSONArray? = null
 
+        //Scores Lists
+        val nicknameList = ArrayList<String>()
+        val gamesWonList = ArrayList<Int>()
+        val gamesLostList = ArrayList<Int>()
+
     }
 }

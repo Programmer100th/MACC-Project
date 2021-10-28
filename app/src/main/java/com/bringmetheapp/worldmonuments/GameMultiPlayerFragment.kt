@@ -1,7 +1,9 @@
 package com.bringmetheapp.worldmonuments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,7 +15,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
@@ -30,10 +34,10 @@ import org.json.JSONObject
  */
 class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
-    private var optionA: Button? = null
-    private var optionB: Button? = null
-    private var optionC: Button? = null
-    private var optionD: Button? = null
+    private var optionA: AppCompatButton? = null
+    private var optionB: AppCompatButton? = null
+    private var optionC: AppCompatButton? = null
+    private var optionD: AppCompatButton? = null
 
     private var correctAnswer: TextView? = null
 
@@ -70,6 +74,8 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
     private var winner = -1
 
+    private lateinit var currentUserNickname : String
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -100,26 +106,30 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
         poll()
 
-        optionA?.setOnClickListener(View.OnClickListener {
+        optionA?.setOnClickListener {
+            optionA?.setBackgroundColor(Color.YELLOW)
             makeAnswer(0)
-            checkAnswer(optionA?.text.toString(), who)
+            checkAnswer(optionA!!, who)
             //updateQuestion(this)
-        })
-        optionB?.setOnClickListener(View.OnClickListener {
+        }
+        optionB?.setOnClickListener {
+            optionB?.setBackgroundColor(Color.YELLOW)
             makeAnswer(1)
-            checkAnswer(optionB?.text.toString(), who)
+            checkAnswer(optionB!!, who)
             //updateQuestion(this)
-        })
-        optionC?.setOnClickListener(View.OnClickListener {
+        }
+        optionC?.setOnClickListener {
+            optionC?.setBackgroundColor(Color.YELLOW)
             makeAnswer(2)
-            checkAnswer(optionC?.text.toString(), who)
+            checkAnswer(optionC!!, who)
             //updateQuestion(this)
-        })
-        optionD?.setOnClickListener(View.OnClickListener {
+        }
+        optionD?.setOnClickListener {
+            optionD?.setBackgroundColor(Color.YELLOW)
             makeAnswer(3)
-            checkAnswer(optionD?.text.toString(), who)
+            checkAnswer(optionD!!, who)
             //updateQuestion(this)
-        })
+        }
 
     }
 
@@ -144,7 +154,9 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
     }
 
-    private fun checkAnswer(answer: String, player: Int) {
+    private fun checkAnswer(answerButton: AppCompatButton, player: Int) {
+
+        val answer = answerButton?.text.toString()
 
         val correctanswer = correctAnswer?.text.toString()
 
@@ -156,6 +168,7 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
         val n: String = checkout2!!.text.toString().trim()
         if (m == n) {
             if (player == who) {
+                answerButton.setBackgroundColor(Color.GREEN)
                 Toast.makeText(context, "Right", Toast.LENGTH_SHORT).show()
                 myScore += 1
             } else
@@ -167,10 +180,13 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
             Thread.sleep(1000)
 
+            answerButton.setBackgroundColor(Color.WHITE)
+
             updateQuestion(requireView())
 
         } else {
             if(player == who) {
+                answerButton.setBackgroundColor(Color.RED)
                 Toast.makeText(context, "Wrong", Toast.LENGTH_SHORT).show()
 
                 markButtonDisable(optionA!!)
@@ -178,7 +194,9 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
                 markButtonDisable(optionC!!)
                 markButtonDisable(optionD!!)
 
-                Thread.sleep(1000)
+                Thread.sleep(500)
+
+                answerButton.setBackgroundColor(Color.WHITE)
 
                 markButtonEnable(optionA!!)
                 markButtonEnable(optionB!!)
@@ -219,10 +237,13 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
         currentIndex = (currentIndex + 1) % 5
 
         if (currentIndex == 0) {
-            checkwinner()
+            val win = checkwinner()
             Configuration.canPoll = false
             val alert = AlertDialog.Builder(view.context)
-            alert.setTitle("Game Over")
+            if(win == 1)
+                alert.setTitle("You win the game!")
+            else
+                alert.setTitle("You lose the game!")
             alert.setCancelable(false)
             alert.setMessage("Your Score: $myScore points")
             alert.setPositiveButton("Close") { dialog, which ->
@@ -243,8 +264,47 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
 
     fun checkwinner(): Int {
-        if (myScore > opponentScore)
-            winner = who
+
+        winner = 0
+
+        if (myScore > opponentScore) {
+            winner = 1
+        }
+
+        val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
+        currentUserNickname = sharedPreferences?.getString("nickname", "").toString()
+
+        if(Configuration.nicknameList.contains(currentUserNickname)) {
+
+            val stringRequest = StringRequest(
+                Request.Method.PATCH,
+                "https://world-monuments.herokuapp.com/minigameResults/" + currentUserNickname + "?gameWon=" + winner,
+                { response ->
+
+                    Log.i("info", "response: " + response)
+                },
+                { error: VolleyError? ->
+                    // Log.i("info", "makeMove: " + error.toString())
+                })
+            // Add the request to the RequestQueue.
+            queue?.add(stringRequest)
+        }
+        else {
+
+            val stringRequest = StringRequest(
+                Request.Method.PUT,
+                "https://world-monuments.herokuapp.com/minigameResults" + "?nickname=" + currentUserNickname + "&gameWon=" + winner,
+                { response ->
+
+                    Log.i("info", "response: " + response)
+                },
+                { error: VolleyError? ->
+                    // Log.i("info", "makeMove: " + error.toString())
+                })
+            // Add the request to the RequestQueue.
+            queue?.add(stringRequest)
+        }
+
 
         return winner
     }
@@ -322,13 +382,13 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
                 if (a != -1) {
                     val answers = arrayOf(
-                        optionA?.text.toString(),
-                        optionB?.text.toString(),
-                        optionC?.text.toString(),
-                        optionD?.text.toString()
+                        optionA,
+                        optionB,
+                        optionC,
+                        optionD
                     )
 
-                    checkAnswer(answers[a], who)
+                    checkAnswer(answers[a]!!, who)
 
 
                     if ((who != 0) and (who != 1)) Log.i("info", "who out of range")
@@ -355,19 +415,14 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
     }
 
-    fun markButtonEnable(button: Button) {
+    fun markButtonEnable(button: AppCompatButton) {
         button?.isEnabled = true
         button?.isClickable = true
-        /*button?.setTextColor(ContextCompat.getColor(textView.context, R.color.white))*/
-        button?.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.white)))
     }
 
-    fun markButtonDisable(button: Button) {
+    fun markButtonDisable(button: AppCompatButton) {
         button?.isEnabled = false
         button?.isClickable = false
-        /*button?.setTextColor(ContextCompat.getColor(textView.context, R.color.white))*/
-        button?.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.yellowRating)))
     }
-
 
 }

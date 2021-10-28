@@ -39,8 +39,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mActivityResultLauncher: ActivityResultLauncher<Intent>
 
-    //private lateinit var sharedPreferences : SharedPreferences
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -132,6 +130,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         editor?.apply {
                             putString("nickname", n)
                             putString("email", e)
+                            putInt("highScore", 0)
                             Log.d("nick", "ok")
                             apply()
                         }
