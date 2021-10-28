@@ -21,7 +21,7 @@ class Configuration {
 
         var END_VALUE = ""
 
-        val pollingPeriod = 500L
+        val pollingPeriod = 1000L
 
         //States of the server
         val INIT = 0 //Not used

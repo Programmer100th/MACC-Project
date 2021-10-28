@@ -26,11 +26,9 @@ import org.json.JSONObject
  * Use the [Waiting.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GameLoadingFragment : Fragment() {
+class GameLoadingFragment : Fragment(R.layout.fragment_loading) {
 
     var queue: RequestQueue? = null
-
-    var flag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +113,9 @@ class GameLoadingFragment : Fragment() {
                             Configuration.pollingPeriod
                         )
                     } else {
-                        findNavController().navigate(R.id.action_gameLoadingFragment_to_gameMultiPlayerFragment)
+                        view?.post {
+                            findNavController().navigate(R.id.action_gameLoadingFragment_to_gameMultiPlayerFragment)
+                        }
                     }
                 }
                 else {

@@ -74,11 +74,12 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
     private var winner = -1
 
-    private lateinit var currentUserNickname : String
+    private var match = -1
+
+    private lateinit var currentUserNickname: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         optionA = view.findViewById(R.id.optionA)
         optionB = view.findViewById(R.id.optionB)
@@ -104,30 +105,30 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
         loadQuestions()
 
-        poll()
+        poll(view)
 
         optionA?.setOnClickListener {
             optionA?.setBackgroundColor(Color.YELLOW)
-            makeAnswer(0)
-            checkAnswer(optionA!!, who)
+            //makeAnswer(0)
+            checkAnswer(optionA!!, who, view)
             //updateQuestion(this)
         }
         optionB?.setOnClickListener {
             optionB?.setBackgroundColor(Color.YELLOW)
-            makeAnswer(1)
-            checkAnswer(optionB!!, who)
+            //makeAnswer(1)
+            checkAnswer(optionB!!, who, view)
             //updateQuestion(this)
         }
         optionC?.setOnClickListener {
             optionC?.setBackgroundColor(Color.YELLOW)
-            makeAnswer(2)
-            checkAnswer(optionC!!, who)
+            //makeAnswer(2)
+            checkAnswer(optionC!!, who, view)
             //updateQuestion(this)
         }
         optionD?.setOnClickListener {
             optionD?.setBackgroundColor(Color.YELLOW)
-            makeAnswer(3)
-            checkAnswer(optionD!!, who)
+            //makeAnswer(3)
+            checkAnswer(optionD!!, who, view)
             //updateQuestion(this)
         }
 
@@ -154,11 +155,15 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
     }
 
-    private fun checkAnswer(answerButton: AppCompatButton, player: Int) {
+    private fun checkAnswer(answerButton: AppCompatButton, player: Int, view: View) {
+
+        Log.d("checkans", "ciao")
 
         val answer = answerButton?.text.toString()
 
         val correctanswer = correctAnswer?.text.toString()
+
+        var number = 0
 
         Log.d("ans", correctanswer + " " + answer)
 
@@ -168,50 +173,47 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
         val n: String = checkout2!!.text.toString().trim()
         if (m == n) {
             if (player == who) {
-                answerButton.setBackgroundColor(Color.GREEN)
-                Toast.makeText(context, "Right", Toast.LENGTH_SHORT).show()
-                myScore += 1
-            } else
-                opponentScore += 1
+                if(m.equals(optionA?.text.toString()))
+                    number = 0
+                else if(m.equals(optionB?.text.toString()))
+                    number = 1
+                else if(m.equals(optionC?.text.toString()))
+                    number = 2
+                else
+                    number = 3
 
+                makeAnswer(number)
+                view.setBackgroundColor(Color.GREEN)
+                Toast.makeText(requireContext(), "You win this round!", Toast.LENGTH_SHORT).show()
+                myScore += 1
+            } else {
+                view.setBackgroundColor(Color.RED)
+                Toast.makeText(requireContext(), "You lose this round!", Toast.LENGTH_SHORT).show()
+                opponentScore += 1
+            }
+/*
             Thread.sleep(1000)
 
             reset()
 
             Thread.sleep(1000)
 
-            answerButton.setBackgroundColor(Color.WHITE)
-
-            updateQuestion(requireView())
+            updateQuestion(view)
+*/
+            Handler(Looper.getMainLooper()).postDelayed({
+                reset()
+                updateQuestion(view)
+            }, 1000)
 
         } else {
-            if(player == who) {
-                answerButton.setBackgroundColor(Color.RED)
+            if (player == who) {
+                view.setBackgroundColor(Color.RED)
                 Toast.makeText(context, "Wrong", Toast.LENGTH_SHORT).show()
 
-                markButtonDisable(optionA!!)
-                markButtonDisable(optionB!!)
-                markButtonDisable(optionC!!)
-                markButtonDisable(optionD!!)
-
-                Thread.sleep(500)
-
-                answerButton.setBackgroundColor(Color.WHITE)
-
-                markButtonEnable(optionA!!)
-                markButtonEnable(optionB!!)
-                markButtonEnable(optionC!!)
-                markButtonEnable(optionD!!)
-                /*optionA!!.setEnabled(false)
-                optionB!!.setEnabled(false)
-                optionC!!.setEnabled(false)
-                optionD!!.setEnabled(false)
-                Thread.sleep(1000)
-                optionA!!.setEnabled(true)
-                optionB!!.setEnabled(true)
-                optionC!!.setEnabled(true)
-                optionD!!.setEnabled(true)*/
-
+                Handler(Looper.getMainLooper()).postDelayed({
+                    view.setBackgroundColor(Color.parseColor("#272343"))
+                    answerButton.setBackgroundColor(Color.parseColor("#d7d7d7"))
+                }, 500)
 
             }
         }
@@ -220,12 +222,15 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
     @SuppressLint("SetTextI18n")
     private fun updateQuestion(view: View) {
-        /*
-            optionA?.setBackgroundResource(R.color.option)
-            optionB?.setBackgroundResource(R.color.option)
-            optionC?.setBackgroundResource(R.color.option)
-            optionD?.setBackgroundResource(R.color.option)
-        */
+
+        Log.d("count", "ciao")
+
+        view.setBackgroundColor(Color.parseColor("#272343"))
+        optionA?.setBackgroundColor(Color.parseColor("#d7d7d7"))
+        optionB?.setBackgroundColor(Color.parseColor("#d7d7d7"))
+        optionC?.setBackgroundColor(Color.parseColor("#d7d7d7"))
+        optionD?.setBackgroundColor(Color.parseColor("#d7d7d7"))
+
         question?.setText("")
         optionA?.setText("")
         optionB?.setText("")
@@ -233,14 +238,14 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
         optionD?.setText("")
 
         qn = qn + 1
-
         currentIndex = (currentIndex + 1) % 5
 
         if (currentIndex == 0) {
+
             val win = checkwinner()
             Configuration.canPoll = false
             val alert = AlertDialog.Builder(view.context)
-            if(win == 1)
+            if (win == 1)
                 alert.setTitle("You win the game!")
             else
                 alert.setTitle("You lose the game!")
@@ -274,7 +279,7 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
         val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
         currentUserNickname = sharedPreferences?.getString("nickname", "").toString()
 
-        if(Configuration.nicknameList.contains(currentUserNickname)) {
+        if (Configuration.nicknameList.contains(currentUserNickname)) {
 
             val stringRequest = StringRequest(
                 Request.Method.PATCH,
@@ -288,8 +293,7 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
                 })
             // Add the request to the RequestQueue.
             queue?.add(stringRequest)
-        }
-        else {
+        } else {
 
             val stringRequest = StringRequest(
                 Request.Method.PUT,
@@ -362,7 +366,7 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
 
 
     // Function to check the answers of the players
-    fun getAnswer() {
+    fun getAnswer(view: View) {
         // Request a string response from the provided URL.
         val stringRequest = StringRequest(
             Request.Method.GET, url + "?req=" + POLLING + "&who=" + who,
@@ -388,7 +392,7 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
                         optionD
                     )
 
-                    checkAnswer(answers[a]!!, who)
+                    checkAnswer(answers[a]!!, who, view)
 
 
                     if ((who != 0) and (who != 1)) Log.i("info", "who out of range")
@@ -396,6 +400,9 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
                     Log.i("info", "response: " + reply?.toString(2))
 
                 }
+
+                if(reply!!.getString("error") == "true")
+                    match = 1
 
             },
             { error: VolleyError? ->
@@ -405,24 +412,15 @@ class GameMultiPlayerFragment : Fragment(R.layout.fragment_multi_player) {
         queue?.add(stringRequest)
     }
 
-    fun poll() {
+    fun poll(view: View) {
         if (!Configuration.canPoll) return
-        if (winner != -1) return
+        if (winner != -1 || match != -1) return
         Handler(Looper.getMainLooper()).postDelayed({
-            getAnswer()
-            poll()
+            getAnswer(view)
+            poll(view)
         }, pollingperiod)
 
     }
 
-    fun markButtonEnable(button: AppCompatButton) {
-        button?.isEnabled = true
-        button?.isClickable = true
-    }
-
-    fun markButtonDisable(button: AppCompatButton) {
-        button?.isEnabled = false
-        button?.isClickable = false
-    }
 
 }

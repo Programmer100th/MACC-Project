@@ -3,6 +3,7 @@ package com.bringmetheapp.worldmonuments
 import android.R.attr.*
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.GradientDrawable
 import android.hardware.Sensor
@@ -121,10 +122,11 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
         gameArrow.setImageResource(R.drawable.game_arrow)
 
-        checkOrientation()
+        checkOrientation(view)
 
         loadQuestions()
 
+        /*
         optionA?.setOnClickListener(View.OnClickListener {
             flagS = true
             checkAnswer(optionA!!)
@@ -145,6 +147,8 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
             checkAnswer(optionD!!)
             updateQuestion(view)
         })
+
+         */
 
     }
 
@@ -237,45 +241,56 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
 
     }
 
-    private fun checkAnswer(option: TextView?) {
+    private fun checkAnswer(answer: String, view: View) {
 
-        gameArrow.setRotation(0f)
+        Log.d("answer", optionA?.text.toString())
+
+        //gameArrow.setRotation(0f)
         sensorManager.unregisterListener(this@GameSinglePlayerFragment)
 
         val correctanswer = correctAnswer?.text.toString()
 
-        checkout1!!.setText(option?.text.toString())
+        checkout1!!.setText(answer)
         checkout2!!.setText(correctanswer)
         val m: String = checkout1!!.text.toString().trim()
         val n: String = checkout2!!.text.toString().trim()
         if (m == n) {
-            option?.setBackgroundResource(R.color.green)
-            Toast.makeText(context, "Right", Toast.LENGTH_SHORT).show()
+            view.setBackgroundColor(Color.GREEN)
+            Toast.makeText(requireContext(), "Right", Toast.LENGTH_SHORT).show()
             mscore = mscore + 1
+
         } else {
-            option?.setBackgroundResource(R.color.red)
-            Toast.makeText(context, "Wrong", Toast.LENGTH_SHORT).show()
+            view.setBackgroundColor(Color.RED)
+            Toast.makeText(requireContext(), "Wrong", Toast.LENGTH_SHORT).show()
+
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            updateQuestion(view)
+        }, 2000)
+
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateQuestion(view: View) {
 
-        Thread.sleep(2000)
-
-        optionA?.setBackgroundResource(R.color.option)
-        optionB?.setBackgroundResource(R.color.option)
-        optionC?.setBackgroundResource(R.color.option)
-        optionD?.setBackgroundResource(R.color.option)
-
-        question?.setText("")
-        optionA?.setText("")
-        optionB?.setText("")
-        optionC?.setText("")
-        optionD?.setText("")
+        view.setBackgroundColor(Color.parseColor("#272343"))
 
         currentIndex = (currentIndex + 1) % 5
         if (currentIndex == 0) {
+            optionA?.setBackgroundResource(R.color.option)
+            optionB?.setBackgroundResource(R.color.option)
+            optionC?.setBackgroundResource(R.color.option)
+            optionD?.setBackgroundResource(R.color.option)
+
+            question?.setText("")
+            optionA?.setText("")
+            optionB?.setText("")
+            optionC?.setText("")
+            optionD?.setText("")
+
+            orientation = ""
+
             val sharedPreferences = context?.getSharedPreferences("myPref", Context.MODE_PRIVATE)
             val editor = sharedPreferences?.edit()
             editor?.apply {
@@ -316,61 +331,63 @@ class GameSinglePlayerFragment : Fragment(R.layout.fragment_single_player), Sens
             Sensor.TYPE_ACCELEROMETER -> accValues = event.values.clone()
         }
 
-        if ((event!!.values[0] <= 2 && event!!.values[0] >= -2) && (event!!.values[1] < 3)) {
-            gameArrow.setRotation(0f)
-            orientation = "up"
-            optionA?.setBackgroundResource(R.color.yellowRating)
-            optionB?.setBackgroundResource(R.color.option)
-            optionC?.setBackgroundResource(R.color.option)
-            optionD?.setBackgroundResource(R.color.option)
-        } else if ((event!!.values[0] > 2)) {
-            gameArrow.setRotation(270f)
-            orientation = "left"
-            optionA?.setBackgroundResource(R.color.option)
-            optionB?.setBackgroundResource(R.color.yellowRating)
-            optionC?.setBackgroundResource(R.color.option)
-            optionD?.setBackgroundResource(R.color.option)
-        } else if ((event!!.values[0] < -2)) {
-            gameArrow.setRotation(90f)
-            orientation = "right"
-            optionA?.setBackgroundResource(R.color.option)
-            optionB?.setBackgroundResource(R.color.option)
-            optionC?.setBackgroundResource(R.color.yellowRating)
-            optionD?.setBackgroundResource(R.color.option)
-        } else {
-            gameArrow.setRotation(180f)
-            orientation = "down"
-            optionA?.setBackgroundResource(R.color.option)
-            optionB?.setBackgroundResource(R.color.option)
-            optionC?.setBackgroundResource(R.color.option)
-            optionD?.setBackgroundResource(R.color.yellowRating)
+        if (flagS == false) {
+            if ((event!!.values[0] <= 2 && event!!.values[0] >= -2) && (event!!.values[1] < 3)) {
+                gameArrow.setRotation(0f)
+                orientation = "up"
+                optionA?.setBackgroundResource(R.color.yellowRating)
+                optionB?.setBackgroundResource(R.color.option)
+                optionC?.setBackgroundResource(R.color.option)
+                optionD?.setBackgroundResource(R.color.option)
+            } else if ((event!!.values[0] > 2)) {
+                gameArrow.setRotation(270f)
+                orientation = "left"
+                optionA?.setBackgroundResource(R.color.option)
+                optionB?.setBackgroundResource(R.color.yellowRating)
+                optionC?.setBackgroundResource(R.color.option)
+                optionD?.setBackgroundResource(R.color.option)
+            } else if ((event!!.values[0] < -2)) {
+                gameArrow.setRotation(90f)
+                orientation = "right"
+                optionA?.setBackgroundResource(R.color.option)
+                optionB?.setBackgroundResource(R.color.option)
+                optionC?.setBackgroundResource(R.color.yellowRating)
+                optionD?.setBackgroundResource(R.color.option)
+            } else {
+                gameArrow.setRotation(180f)
+                orientation = "down"
+                optionA?.setBackgroundResource(R.color.option)
+                optionB?.setBackgroundResource(R.color.option)
+                optionC?.setBackgroundResource(R.color.option)
+                optionD?.setBackgroundResource(R.color.yellowRating)
+            }
         }
 
         view?.invalidate()
     }
 
-    private fun checkOrientation(){
-        if(qn > 5) return
+    private fun checkOrientation(view: View) {
+        if (qn > 5) return
         Handler(Looper.getMainLooper()).postDelayed({
-            if(prevOrientation == orientation) {
+            if (prevOrientation == orientation) {
 
-                if(orientation.equals("up"))
-                    checkAnswer(optionA!!)
-                else if(orientation.equals("left"))
-                    checkAnswer(optionB!!)
-                else if(orientation.equals("right"))
-                    checkAnswer(optionC!!)
+                flagS = true
+
+                if (orientation.equals("up"))
+                    checkAnswer(optionA?.text.toString(), view)
+                else if (orientation.equals("left"))
+                    checkAnswer(optionB?.text.toString(), view)
+                else if (orientation.equals("right"))
+                    checkAnswer(optionC?.text.toString(), view)
                 else
-                    checkAnswer(optionD!!)
-
-                updateQuestion(requireView())
+                    checkAnswer(optionD?.text.toString(), view)
 
             }
             prevOrientation = orientation
 
-            checkOrientation()
+            checkOrientation(view)
 
-        }, 2000)
+        }, 4000)
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {

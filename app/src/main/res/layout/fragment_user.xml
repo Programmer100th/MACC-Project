@@ -10,7 +10,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="24dp" />
+        android:layout_height="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,8 +27,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/userNicknameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Nickname"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/userNickname"
@@ -37,8 +48,18 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 android:textColor="@color/black"
-                android:textSize="15sp"
-                tools:text="User" />
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/userEmailLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Email address"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/userEmail"
@@ -47,8 +68,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 android:textColor="@color/black"
-                android:textSize="15sp"
-                tools:text="user@user.com" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 

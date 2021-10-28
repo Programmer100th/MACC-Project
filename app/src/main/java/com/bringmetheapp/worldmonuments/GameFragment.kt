@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONException
 import com.bringmetheapp.worldmonuments.Configuration as myConfiguration
@@ -37,6 +38,8 @@ class GameFragment : Fragment(R.layout.fragment_game) {
         myConfiguration.gamesLostList.clear()
 
         jsonParseMinigameScores()
+
+        resetMinigameState()
 
         btnSinglePlayer.setOnClickListener{
             myConfiguration.MULTIPLAYER = false
@@ -90,6 +93,31 @@ class GameFragment : Fragment(R.layout.fragment_game) {
                     /*Log.d("nick", nicknameList.toString())
                     Log.d("gw", gamesWonList.toString())
                     Log.d("gl", gamesLostList.toString())*/
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+
+            },
+            { Log.d("API Request", "Something Went Wrong") })
+
+        mQueue?.add(request)
+    }
+
+    fun resetMinigameState() {
+
+        Log.d("Result", "ok")
+
+        val url = "https://world-monuments.herokuapp.com/minigameServer?req=3&who=-1"
+
+        val request = JsonObjectRequest(
+            Request.Method.GET, url, null, { response ->
+                try {
+                    val error = response.getString("error")
+                    val state = response.getString("state")
+                    Log.d("Prova", error)
+                    Log.d("Prova", state)
+
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
